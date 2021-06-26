@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DZ32</title>
+    <style>
+        body {
+            display: block;
+            height: 800px;
+        }
+        .traffic__light {
+            background-color: white;
+            border-radius: 50%;
+            border: 1px solid;
+            height: 100px;
+            width: 100px;
+        }
+        .traffic__light {
+            background-color: white;
+            border-radius: 50%;
+            border: 1px solid;
+            height: 100px;
+            width: 100px;
+        }
+        .traffic__light {
+            background-color: white;
+            border-radius: 50%;
+            border: 1px solid;
+            height: 100px;
+            width: 100px;
+        }
+        .traffic__red {
+            background-color: red;
+        }
+        .traffic__yellow {
+            background-color: yellow;
+        }
+        .traffic__green {
+            background-color: green;
+        }
+        .block {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+        }
+    </style>
+</head>
+<body>
+<!--1) Создать страницу, при заходе на которую через 3 секунды открывается рекламный баннер-->
+<!--(содержимое баннера может быть любое, но в рамках цензуры).-->
+<!--Окно рекламы нельзя закрыть 10 секунд.-->
+<!--На баннере каждую секунду отсчитывается таймер (10 секунд).-->
+<!--По истечении 10 секунд появляется возможность закрыть баннер на крестик в правом верхнем углу.-->
+<input type="button" value="Посмотреть рекламу" id="start" onclick="showBanner()">
+<div style="display: none; flex-direction: row;" id="banner">
+    <img src="casino.jpg" alt="" id="img">
+    <input type="button" style="display: block;height: fit-content" value="Х" id="button" onclick="hideBanner()">
+</div>
+<script>
+    function showBanner() {
+        setTimeout(() => document.querySelector('#banner').style.display = "flex", 3000);
+        document.querySelector("#start").style.display = "none";
+    }
+
+    function hideBanner() {
+        setTimeout(() => document.querySelector("#banner").style.display = "none", 10000);//
+        /*window.setInterval(timer, 1000);*///реализовал таймер, но значение не останавливается, но по факту работает
+    }
+    /*window.setInterval(timer, 1000);
+    function timer() {
+        let elem = document.querySelector('#button');//
+        elem.value = parseInt(elem.value)-1;
+        if (elem.value === 0) {
+            clearInterval();
+        }
+    }*/
+</script>
+<hr>
+<!--2) Создать html-страницу со светофором (три блока со скругленными краями) и кнопкой, которая переключает светофор на следующий цвет.-->
+<div id="red" class="traffic__light traffic__red"></div>
+<div id="yellow" class="traffic__light traffic__yellow"></div>
+<div id="green" class="traffic__light traffic__green"></div>
+<input type="button" value="Turn light" id="turnLight" onclick="changeLight()">
+<script>
+    const redlight = document.getElementById("red");
+    const yellowlight = document.getElementById("yellow");
+    const greenlight = document.getElementById("green");
+    const button = document.getElementById("turnLight");
+    function changeLight() {
+        button.addEventListener("click", function() {
+            if (redlight.classList.contains("traffic__red")) {
+                redlight.classList.remove("traffic__red");
+                yellowlight.classList.add("traffic__yellow");
+            } else if (yellowlight.classList.contains("traffic__yellow")) {
+                yellowlight.classList.remove("traffic__yellow");
+                greenlight.classList.add("traffic__green");//вроде всё правильно, но с жётлого переключает на красный, хоть и указан зелёный
+            } else if (greenlight.classList.contains("traffic__green")) {
+                greenlight.classList.remove("traffic__green");
+                redlight.classList.add("traffic__red");
+            }
+        });
+    }
+</script>
+<hr>
+<!--3) Создать страницу, на которой есть поле для ввода имени, textarea и кнопк "Оставить комментарий".-->
+<!--При написании в textarea комментария и нажатия кнопки, комментарий должен появиться в отдельном блоке,-->
+<!--с указанием имени из заполненного поля и датой/временем комменатрия.-->
+<!--При вводе пустых значений в поля или в textarea меньше 3 или больше 100 символов не добавлять такие комментарии выдавая предупреждение.-->
+<div class="block">
+    <label>Ваше имя: <input type="text" class="task4__text" placeholder="Имя"></label>
+    <label for="comment"></label><textarea id="comment" cols="30" rows="5"></textarea>
+    <input type="button" value="Оставить комментарий"
+       onclick=comment();
+       id="btn4">
+    <div class="commentList">
+    </div>
+</div>
+<script>
+    function addZero(a) {
+        if (+a < 10) return '0' + a;
+        else return a;
+    }
+    function comment() {
+        if (!isNaN(document.querySelector(".task4__text").value)) alert("Укажите имя!");
+        else if (document.querySelector("#comment").value.length < 3) alert("Мало текста!");
+        else if (document.querySelector("#comment").value.length > 100) alert("Много текста!");
+        else {
+            let name = document.querySelector(".task4__text").value;
+            let date = new Date();
+            let text = document.querySelector("#comment").value;
+
+            let s1 = document.createElement('span');
+            s1.classList.add("comment__name");
+            s1.innerHTML = name;
+
+            let s2 = document.createElement('span');
+            s2.classList.add("comment__date");
+            s2.innerHTML = (` ${addZero(date.getDate())}.${addZero(date.getMonth()+1)}.${date.getFullYear()}  ${date.getHours()}:${date.getMinutes()}`);
+
+            let p1 = document.createElement('p');
+            p1.classList.add("comment__text");
+            p1.innerHTML = text;
+
+            document.querySelector(".commentList").appendChild(s1);
+            document.querySelector(".commentList").appendChild(s2);
+            document.querySelector(".commentList").appendChild(p1);
+        }
+    }
+</script>
+</body>
+</html>
